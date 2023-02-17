@@ -76,7 +76,7 @@ export default {
                 let full_name = data.full_name
                 let html_url = data.html_url
                 let description = data.description
-                let forks_count
+                let forks_count = data.forks_count
                 
             });
         }
