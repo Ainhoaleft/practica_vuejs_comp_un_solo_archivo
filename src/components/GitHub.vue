@@ -46,12 +46,16 @@ export default {
             // Obtener datos de autenticación de usuario para hacer peticiones
             // autenticadas a la API de GitHub
             var userAuth = process.env.VUE_APP_USERNAME || "ainhoaleft";
-            var passAuth = process.env.VUE_APP_USERTOKEN || "pass";
+            var passAuth = process.env.VUE_APP_USERTOKEN || "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";
 
             // TODO: realizar petición fetch par obtener los datos y mostrar la información en la página
             // Ejemplo de paso de datos de autorización con fetch: https://stackoverflow.com/questions/43842793/basic-authentication-with-fetch
             let url = 'https://api.github.com/users/{{user}}';
             fetch(url,{method:'GET'})
+            .then(response => response.json())
+            .then(data =>{this.user = data
+                
+            })
         },
         obtenerRepositorios: function() {
             // TODO: Función para obtener los repositorios del usuario desde la API de GítHub
@@ -60,13 +64,21 @@ export default {
             // Obtener datos de autenticación de usuario para hacer peticiones
             // autenticadas a la API de GitHub
             var userAuth = process.env.VUE_APP_USERNAME || "ainhoaleft";
-            var passAuth = process.env.VUE_APP_USERTOKEN || "pass";
+            var passAuth = process.env.VUE_APP_USERTOKEN || "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";
 
 
             // TODO: realizar petición fetch par obtener los datos y mostrar la información en la página
             // Ejemplo de paso de datos de autorización con fetch: https://stackoverflow.com/questions/43842793/basic-authentication-with-fetch
             let url = 'https://api.github.com/users/{{user}}/repos';
             fetch(url,{method:'GET'})
+            .then(response => response.json())
+            .then(data =>{this.user = data
+                let full_name = data.full_name
+                let html_url = data.html_url
+                let description = data.description
+                let forks_count
+                
+            });
         }
     }
 }
