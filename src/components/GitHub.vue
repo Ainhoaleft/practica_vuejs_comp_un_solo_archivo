@@ -18,7 +18,7 @@
 <script>
 
 // TODO: Importar componente GitHubRepos
-import GitHubRepos from 'GitHubRepos.vue'
+import GitHubRepos from './GitHubRepos.vue'
 
 export default {
     name: 'GitHub',
