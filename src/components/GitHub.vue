@@ -2,8 +2,8 @@
     <div>
         <input v-model="user" placeholder="Introduce nombre de usuario de Github" v-show="input" v-on:keydown="obtenerUsuario">
         <div class="alert alert-warning" role="alert" v-show="advertencia">El usuario no existe</div>
-        <div class="card" style="width: 20px;">
-            <img src="userData.avatar_url" alt="" class="card-img-top">
+        <div class="card" style="width: 18rem;" v-show="input">
+            <img src="userData.avatar_url" alt="#" class="card-img-top">
             <div class="card-body">
                 <h3 class="card-title" href="userData.login">Titulo</h3>
                 <p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatem quae velit totam doloribus atque molestiae animi tempore odio natus mollitia explicabo dolorem accusamus ut voluptas,</p>
@@ -76,10 +76,17 @@ export default {
             // TODO: realizar petición fetch par obtener los datos y mostrar la información en la página
             // Ejemplo de paso de datos de autorización con fetch: https://stackoverflow.com/questions/43842793/basic-authentication-with-fetch
             let url = 'https://api.github.com/users/{{user}}/repos';
-            fetch(url,{method:'GET'})
+            let username = 'user';
+            let password = 'pass';
+    
+            //headers.append('Content-Type', 'text/json');
+
+            fetch(url,{method:'GET', 
+            headers: {'Authorization': 'Basic ' + btoa('login:password')}})
             .then(response => response.json())
-            .then(data =>{this.user = data
-                let full_name = data.full_name
+            .then(data =>{
+                this.user = data
+                let full_name = data.full_name  
                 let html_url = data.html_url
                 let description = data.description
                 let forks_count = data.forks_count
@@ -88,6 +95,7 @@ export default {
         }
     }
 }
+
 </script>
 
 <style scoped>
