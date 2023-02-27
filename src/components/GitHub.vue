@@ -6,12 +6,13 @@
             <img src="userData.avatar_url" alt="#" class="card-img-top">
             <div class="card-body">
                 <h3 class="card-title" href="userData.login">Titulo</h3>
-                <p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatem quae velit totam doloribus atque molestiae animi tempore odio natus mollitia explicabo dolorem accusamus ut voluptas,</p>
-                <a href="#" class="btn btn-primary" v-on:keydown="obtenerUsuario">Pincha</a>
+                <p class="card-text">vuejs</p>
+                <a href="#" class="btn btn-primary" v-on:keydown="obtenerUsuario">Repositorios</a>
                 <a href="userData.html_url" class="card-link">URL de Github</a>
             </div>
         </div>
         <!-- TODO: Crear componente GitHub -->
+        <GitHubRepos />
     </div>
 </template>
 
@@ -33,7 +34,8 @@ export default {
             advertencia: false,
             card: false,
             userData: "",
-            repolist: "" 
+            repolist: ""
+            
 
             // TODO: crear variables de datos para el funcionamiento del componente
         }
@@ -47,8 +49,8 @@ export default {
 
             // Obtener datos de autenticación de usuario para hacer peticiones
             // autenticadas a la API de GitHub
-            var userAuth = process.env.VUE_APP_USERNAME || "Ainhoaleft";
-            var passAuth = process.env.VUE_APP_USERTOKEN || "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";
+            process.env.VUE_APP_USERNAME || "Ainhoaleft";
+            process.env.VUE_APP_USERTOKEN || "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";
 
             // TODO: realizar petición fetch par obtener los datos y mostrar la información en la página
             // Ejemplo de paso de datos de autorización con fetch: https://stackoverflow.com/questions/43842793/basic-authentication-with-fetch
@@ -56,10 +58,10 @@ export default {
             fetch(url,{method:'GET'})
             .then(response => response.json())
             .then(data =>{
-                let avatar_url = data.avatar_url
-                let login = data.login
-                let html_url = data.html_url
-                let repos_url = data.repos_url
+                data.avatar_url
+                data.login
+                data.html_url
+                data.repos_url
                 
             });
         },
@@ -69,15 +71,15 @@ export default {
 
             // Obtener datos de autenticación de usuario para hacer peticiones
             // autenticadas a la API de GitHub
-            var userAuth = process.env.VUE_APP_USERNAME || "Ainhoaleft";
-            var passAuth = process.env.VUE_APP_USERTOKEN || "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";
+            process.env.VUE_APP_USERNAME || "Ainhoaleft";
+            process.env.VUE_APP_USERTOKEN || "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";
 
 
             // TODO: realizar petición fetch par obtener los datos y mostrar la información en la página
             // Ejemplo de paso de datos de autorización con fetch: https://stackoverflow.com/questions/43842793/basic-authentication-with-fetch
             let url = 'https://api.github.com/users/{{user}}/repos';
-            let username = 'user';
-            let password = 'pass';
+            //let username = 'user';
+           // let password = 'pass';
     
             //headers.append('Content-Type', 'text/json');
 
@@ -86,10 +88,10 @@ export default {
             .then(response => response.json())
             .then(data =>{
                 this.user = data
-                let full_name = data.full_name  
-                let html_url = data.html_url
-                let description = data.description
-                let forks_count = data.forks_count
+                data.full_name  
+                data.html_url
+                data.description
+                data.forks_count
                 
             });
         }
