@@ -1,19 +1,34 @@
 <template>
-    <div>
-        <input v-model="user" placeholder="Introduce nombre de usuario de Github" v-show="input" v-on:keydown="obtenerUsuario">
-        <div class="alert alert-warning" role="alert" v-show="advertencia">El usuario no existe</div>
-        <div class="card" style="width: 18rem;" v-show="input">
-            <img src="userData.avatar_url" alt="#" class="card-img-top">
-            <div class="card-body">
-                <h3 class="card-title" href="userData.login">Titulo</h3>
-                <p class="card-text">vuejs</p>
-                <a href="#" class="btn btn-primary" v-on:keydown="obtenerUsuario">Repositorios</a>
-                <a href="userData.html_url" class="card-link">URL de Github</a>
-            </div>
-        </div>
-        <!-- TODO: Crear componente GitHub -->
-        <GitHubRepos />
+   <div class="container mx-auto">
+    <input type="text" id="nombre" class="form-control" @keyup.enter = "obtenerUsuario">
+
+    <div class="alert alert-danger mt-5" v-if="advertencia">
+      El usuario no existe
     </div>
+
+    <div v-else>
+      <div class="card col-xl-3 col-lg-5 col-md-7 col-sm-9 col-10 mx-auto" v-if="card">
+        <img :src="user.avatar_url" class="card-img-top" alt="...">
+        <div class="card-body">
+          <h5 class="card-title text-center">{{ user.login }}</h5>
+          <button class="btn btn-primary mx-auto" @click = "obtenerRepositorios">Repositorios</button>
+          <a :href="'https://github.com/' + user.login" target="_blank" class="btn btn-light mx-auto mt-2">Url GitHub</a>
+        </div>
+      </div>
+
+      <div v-if="mostrarRepo"  class="row">
+        <div v-for="repo in repos" :key="repo.id" class="card col-4">
+      
+          <div class="card-body">
+            <h5 class="card-title">{{ repo.name }}</h5>
+            <p class="card-text">{{ repo.description }}</p>
+            <a :href="repo.html_url" target="_blank" class="btn btn-primary mt-2">Ver repositorio</a>
+          </div>
+        </div>
+      </div>
+    </div>
+   <GitHubRepos />
+  </div>
 </template>
 
 <script>
@@ -29,12 +44,12 @@ export default {
     },
     data: function() {
         return {
-            user: 'vuejs',
-            input: true,
+            user: null,
+            mostrarRepo: false,
             advertencia: false,
             card: false,
-            userData: "",
-            repolist: ""
+            repos: [],
+            
             
 
             // TODO: crear variables de datos para el funcionamiento del componente
@@ -49,54 +64,61 @@ export default {
 
             // Obtener datos de autenticación de usuario para hacer peticiones
             // autenticadas a la API de GitHub
-            process.env.VUE_APP_USERNAME || "Ainhoaleft";
-            process.env.VUE_APP_USERTOKEN || "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";
+            // var userAuth = process.env.VUE_APP_USERNAME || "Ainhoaleft";
+           // var passAuth =  process.env.VUE_APP_USERTOKEN || "pass";
 
             // TODO: realizar petición fetch par obtener los datos y mostrar la información en la página
             // Ejemplo de paso de datos de autorización con fetch: https://stackoverflow.com/questions/43842793/basic-authentication-with-fetch
-            let url = 'https://api.github.com/users/{{user}}';
-            fetch(url,{method:'GET'})
-            .then(response => response.json())
-            .then(data =>{
-                data.avatar_url
-                data.login
-                data.html_url
-                data.repos_url
-                
-            });
-        },
+        fetch(`https://api.github.com/users/${document.getElementById("nombre").value}`)
+        .then((response) => {
+          if (!response.ok) throw new Error("Error");
+          return response.json();
+        })
+        .then((data) => {
+          this.user = data;
+          this.advertencia = false;
+          this.card = true;
+          this.mostrarRepo = false;
+          this.repos = [];
+        })
+        .catch(() => {
+          this.advertencia = true;
+          this.card = false;
+          this.mostrarRepo = false;
+        });
+    },
         obtenerRepositorios: function() {
             // TODO: Función para obtener los repositorios del usuario desde la API de GítHub
             // La URL de los repositorios de usuario se puede obtener a través del campo 'repos_url' de los datos del usuario
 
             // Obtener datos de autenticación de usuario para hacer peticiones
             // autenticadas a la API de GitHub
-            process.env.VUE_APP_USERNAME || "Ainhoaleft";
-            process.env.VUE_APP_USERTOKEN || "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";
+
+           // var userAuth = process.env.VUE_APP_USERNAME || "Ainhoaleft";
+           // var passAuth = process.env.VUE_APP_USERTOKEN || "pass";
 
 
             // TODO: realizar petición fetch par obtener los datos y mostrar la información en la página
             // Ejemplo de paso de datos de autorización con fetch: https://stackoverflow.com/questions/43842793/basic-authentication-with-fetch
-            let url = 'https://api.github.com/users/{{user}}/repos';
-            //let username = 'user';
-           // let password = 'pass';
     
             //headers.append('Content-Type', 'text/json');
 
-            fetch(url,{method:'GET', 
-            headers: {'Authorization': 'Basic ' + btoa('login:password')}})
-            .then(response => response.json())
-            .then(data =>{
-                this.user = data
-                data.full_name  
-                data.html_url
-                data.description
-                data.forks_count
-                
-            });
-        }
-    }
-}
+            fetch(`https://api.github.com/users/${this.user.login}/repos`)
+        .then((response) => {
+          if (!response.ok) throw new Error("Error");
+          return response.json();
+        })
+        .then((data) => {
+          this.repos = data;
+          this.card = false;
+          this.mostrarRepo = true;
+        })
+        .catch((error) => {
+            console.log(error);
+    });
+    },
+  },
+};
 
 </script>
 
